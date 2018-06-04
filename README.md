@@ -27,7 +27,7 @@ numstr.consts.alphabet = Array.from('0123456789abcdefghijklmnopqrstuvwxyzABCDEFG
 
 ### isNumStr
 
-Determine if a string passably represents a number in a given base.  False if the string contains invalid characters or too many `'.'` points; otherwise true.  Negative values are ok.  Case sensitivity is dependent on `consts.caseSensitive`.
+Determine if a string passably represents a number in a given base.  False if the string contains invalid characters or too many `'.'` points; otherwise true.  Integers only by default.  Negative values are ok.
 
 ```javascript
 // Parameters
