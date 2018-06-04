@@ -43,10 +43,9 @@ let consts = {
   point: 46
 }
 
-
-/* Test a string to determine whether it represents a number in a given base.
-** The empty string is interpreted as an implied zero and will pass.
-** Other variations of implied zero will also pass; e.g. '-.' will pass.
+/* Check that a string represents a number in a given base.
+** False if the string contains invalid characters or too many radix points. True otherwise.
+** Case sensitivity is depedent on consts.caseSensitive. Negative values ok.
 **
 ** @param {string} str - The string to be tested.
 ** @param {number=} base - The base to use when testing.
@@ -75,7 +74,7 @@ function isNumStr(str, base = 10, radixPointOk = false) {
     }
   }
 
-  // If you get this far, the string represents a number in the specified base.
+  // If you get this far, the string is ok.
   return true;
 }
 
@@ -111,3 +110,4 @@ function changeCase(code) {
 
 
 module.exports.isNumStr = isNumStr;
+module.exports.consts = consts;
