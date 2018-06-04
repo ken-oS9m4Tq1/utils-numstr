@@ -54,8 +54,8 @@ numstr.bufferFromHexStr('4f941 4295f ef924 2d8a4 9762e 72af1 4');     // returns
 Remove the hex prefix `0x`, if present, from a hex string.
 
 ```javascript
-numstr.no0x('abcdef');             // returns 'abcdef'
-numstr.no0x('0xabcdef');           // returns 'abcdef'
+numstr.no0x('abcdef');          // returns 'abcdef'
+numstr.no0x('0xabcdef');        // returns 'abcdef'
 ```
 
 ### with0x
@@ -63,8 +63,8 @@ numstr.no0x('0xabcdef');           // returns 'abcdef'
 Add a hex prefix `0x`, if not already present, to a hex string.
 
 ```javascript
-numstr.with0x('abcdef');             // returns '0xabcdef'
-numstr.with0x('0xabcdef');           // returns '0xabcdef'
+numstr.with0x('abcdef');        // returns '0xabcdef'
+numstr.with0x('0xabcdef');      // returns '0xabcdef'
 ```
 
 ### removeLeadingZeros
@@ -72,8 +72,8 @@ numstr.with0x('0xabcdef');           // returns '0xabcdef'
 Remove the leading zeros from a string.
 
 ```javascript
-numstr.removeLeadingZeros('0000abc');     // returns 'abc'
-numstr.removeLeadingZeros('0000');        // returns ''
+numstr.removeLeadingZeros('0000abc');       // returns 'abc'
+numstr.removeLeadingZeros('0000');          // returns ''
 ```
 
 ### removeTrailingZeros
@@ -81,6 +81,22 @@ numstr.removeLeadingZeros('0000');        // returns ''
 Remove the trailing zeros from a string.
 
 ```javascript
-numstr.removeTrailingZeros('1230000');     // returns '123'
-numstr.removeTrailingZeros('0000');        // returns ''
+numstr.removeTrailingZeros('1230000');      // returns '123'
+numstr.removeTrailingZeros('0000');         // returns ''
+```
+
+### rectify
+
+Format a number string so that it looks like a normal number.
+
+* Leading zeros are removed from the integer part. 
+* Trailing zeros are removed from the fractional part. 
+* Negative signs are removed from zero values. 
+* A radix point is included only for nonzero fractional values. 
+* If the string is all zeros, is empty, or otherwise implies a zero value, the function returns '0'.
+
+```javascript
+numstr.rectify('-00123.4560');      // returns '-123.456'
+numstr.rectify('123.000');          // returns '123'
+numstr.rectify('-.0');              // returns '0'
 ```

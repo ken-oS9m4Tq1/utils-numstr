@@ -146,6 +146,40 @@ function with0x(hexStr) {
   return hexStr;
 }
 
+/* Format a number string so that it looks like a normal number.
+** Leading zeros are removed from the integer part. Trailing zeros are removed from the fractional part.
+** Negative signs are removed from zero values. A radix point is included only for nonzero fractional values.
+** If the string is all zeros, is empty, or otherwise implies a zero value, the function returns '0'.
+**
+** @param {string} str - The number string to be rectified.
+** @resolve {string} The rectified number string.
+*/
+function rectify(str) {
+  if (!isNumStr(str, consts.alphabet.length, true)) throw new Error('in rectify, str is not a number');
+
+  // Remove the negative sign if necessary.
+  let abs = (str[0] === '-') ? str.slice(1) : str;
+
+  // Split into fractional and integer parts.
+  let split = abs.split('.');
+  let integerPart = split[0] || '';
+  let fractionalPart = split[1] || '';
+
+  // Trim zeros.
+  integerPart = removeLeadingZeros(integerPart);
+  fractionalPart = removeTrailingZeros(fractionalPart);
+
+  // Put it back together.
+  let rectified;
+  rectified = integerPart ? integerPart : '0';
+  rectified += fractionalPart ? '.' + fractionalPart : '';
+
+  // Replace the negative sign if necessary.
+  if (str[0] === '-' && rectified != '0') rectified = '-' + rectified;
+
+  return rectified;
+}
+
 /* Remove the leading zeros from a string.
 **
 */
@@ -202,6 +236,7 @@ module.exports = {
   bufferFromHexStr:         bufferFromHexStr,
   no0x:                     no0x,
   with0x:                   with0x,
+  rectify:                  rectify,
   removeLeadingZeros:       removeLeadingZeros,
   removeTrailingZeros:      removeTrailingZeros
 }
