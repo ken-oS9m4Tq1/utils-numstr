@@ -106,6 +106,26 @@ function changeCase(code) {
   else return code;
 }
 
+/* Obtain a buffer from a hex value in string representation.
+** Whitespace is removed prior to conversion.
+**
+** @param {string} hexStr - A hex value in string representation.
+** @resolve {buffer} The hex value as a byte array.
+*/
+function bufferFromHexStr(hexStr) {
+  // Remove whitespace.
+  hexStr = hexStr.replace(/\s+/g, '');
+
+  // Remove 0x.
+  hexStr = no0x(hexStr);
+
+  // Hex values with an odd number of characters need to be padded; otherwise the last character will be truncated.
+  if (hexStr.length % 2) hexStr = '0' + hexStr;
+
+  // Convert to a buffer.
+  return Buffer.from(hexStr, 'hex');
+}
+
 /* Remove the hex prefix, if present, from a hex string.
 **
 ** @param {string} hexStr - The hex string.
@@ -130,5 +150,6 @@ function with0x(hexStr) {
 const me = module.exports;
 me.consts = consts;
 me.isNumStr = isNumStr;
+me.bufferFromHexStr = bufferFromHexStr;
 me.no0x = no0x;
 me.with0x = with0x;

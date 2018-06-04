@@ -27,7 +27,7 @@ numstr.consts.alphabet = Array.from('0123456789abcdefghijklmnopqrstuvwxyzABCDEFG
 
 ### isNumStr
 
-Determine if a string passably represents a number in a given base.  False if the string contains invalid characters or too many `.` points; otherwise true.  Negative values are ok.  Case sensitivity is dependent on `consts.caseSensitive`.
+Determine if a string passably represents a number in a given base.  False if the string contains invalid characters or too many `'.'` points; otherwise true.  Negative values are ok.  Case sensitivity is dependent on `consts.caseSensitive`.
 
 ```javascript
 // Parameters
@@ -37,6 +37,17 @@ let radixPointOk = true;                   // {bool = false} - Optional. If fals
 
 numstr.isNumStr(str, base, radixPointOk);  // {bool} - Returns true if the string is a number in the specified base, false otherwise.
 ```
+
+### bufferFromHexStr
+
+Obtain a buffer from a hex value in string representation.  Whitespace in the string is ignored as are `0x` prefixes.
+
+Note: this function accomodates the Buffer data type.  Therefore, it will only recognize the conventional [0-9a-f] case insensitive hexadecimal alphabet.  It is unaffected by changes to `consts.alphabet` or `consts.caseSensitive`.  Hex sequences of odd length are padded with a leading zero to conform to the structure of a byte array.  If a non-hex character is encountered, any remaining bytes in the sequence will be truncated consistent with the behavior of `Buffer.from`.
+
+```javascript
+numstr.bufferFromHexStr('4f941 4295f ef924 2d8a4 9762e 72af1 4');     // returns <Buffer 04 f9 41 42 95 fe f9 24 2d 8a 49 76 2e 72 af 14>
+```
+
 
 ### no0x
 
