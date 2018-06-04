@@ -110,7 +110,7 @@ function changeCase(code) {
 ** Whitespace is removed prior to conversion.
 **
 ** @param {string} hexStr - A hex value in string representation.
-** @resolve {buffer} The hex value as a byte array.
+** @return {buffer} The hex value as a byte array.
 */
 function bufferFromHexStr(hexStr) {
   // Remove whitespace.
@@ -129,7 +129,7 @@ function bufferFromHexStr(hexStr) {
 /* Remove the hex prefix, if present, from a hex string.
 **
 ** @param {string} hexStr - The hex string.
-** @resolve {string} The hex string without a 0x prefix.
+** @return {string} The hex string without a 0x prefix.
 */
 function no0x(hexStr) {
   if (hexStr.slice(0, 2) === '0x') hexStr = hexStr.slice(2);
@@ -139,14 +139,43 @@ function no0x(hexStr) {
 /* Add a hex prefix, if not already present, to a hex string.
 **
 ** @param {string} hexStr - The hex string.
-** @resolve {string} The hex string with 0x prefix.
+** @return {string} The hex string with 0x prefix.
 */
 function with0x(hexStr) {
   if (hexStr.slice(0, 2) !== '0x') hexStr = '0x' + hexStr;
   return hexStr;
 }
 
+/* Remove the leading zeros from a string.
+**
+*/
+function removeLeadingZeros(str) {
+  if (typeof str != 'string') throw new Error('in removeLeadingZeros, data type mismatch');
 
+  let iNonZero = str.search(/[^0]/); // index of the first nonzero digit
+  if (iNonZero > 0) str = str.slice(iNonZero);
+  if (iNonZero < 0) return ''; // if 'str' is entirely zeros or is the empty string
+    
+  return str;
+}
+
+/* Remove the trailing zeros from a string.
+**
+*/
+function removeTrailingZeros(str) {
+  if (typeof str != 'string') throw new Error('in removeTrailingZeros, \'str\' must be a string.');
+
+  let iNonZero = -1;
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] != '0') {
+      iNonZero = i; // index of the first nonzero digit from the right.
+      break;
+    }
+  }
+  str = str.slice(0, iNonZero + 1); // if 'str' is entirely zeros or is the empty string, gives ''.
+
+  return str;
+}
 
 
 /* Increment a character to the succeeding character in consts.alphabet, modulo the given base.
@@ -174,4 +203,6 @@ me.isNumStr = isNumStr;
 me.bufferFromHexStr = bufferFromHexStr;
 me.no0x = no0x;
 me.with0x = with0x;
+me.removeLeadingZeros = removeLeadingZeros;
+me.removeTrailingZeros = removeTrailingZeros;
 
