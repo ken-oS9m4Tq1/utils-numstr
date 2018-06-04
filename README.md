@@ -66,3 +66,21 @@ Add a hex prefix `0x`, if not already present, to a hex string.
 numstr.with0x('abcdef');             // returns '0xabcdef'
 numstr.with0x('0xabcdef');           // returns '0xabcdef'
 ```
+
+### removeLeadingZeros
+
+Remove the leading zeros from a string.
+
+```javascript
+numstr.removeLeadingZeros('0000abc');     // returns 'abc'
+numstr.removeLeadingZeros('0000');        // returns ''
+```
+
+### removeTrailingZeros
+
+Remove the trailing zeros from a string.
+
+```javascript
+numstr.removeTrailingZeros('1230000');     // returns '123'
+numstr.removeTrailingZeros('0000');        // returns ''
+```
