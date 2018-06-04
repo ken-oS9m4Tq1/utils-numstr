@@ -147,9 +147,31 @@ function with0x(hexStr) {
 }
 
 
+
+
+/* Increment a character to the succeeding character in consts.alphabet, modulo the given base.
+**
+*/
+function incChar(char, base) {
+  let val = consts.alphabet.indexOf(char);
+  val = (val + 1) % base;
+  return consts.alphabet[val];
+}
+
+/* Decrement a character to the preceding character in consts.alphabet, modulo the given base.
+**
+*/
+function decChar(char, base) {
+  let val = consts.alphabet.indexOf(char);
+  val = (val + base - 1) % base;
+  return consts.alphabet[val];
+}
+
+
 const me = module.exports;
 me.consts = consts;
 me.isNumStr = isNumStr;
 me.bufferFromHexStr = bufferFromHexStr;
 me.no0x = no0x;
 me.with0x = with0x;
+
