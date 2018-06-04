@@ -163,7 +163,7 @@ function removeLeadingZeros(str) {
 **
 */
 function removeTrailingZeros(str) {
-  if (typeof str != 'string') throw new Error('in removeTrailingZeros, \'str\' must be a string.');
+  if (typeof str != 'string') throw new Error('in removeTrailingZeros, data type mismatch');
 
   let iNonZero = -1;
   for (let i = str.length - 1; i >= 0; i--) {
@@ -176,7 +176,6 @@ function removeTrailingZeros(str) {
 
   return str;
 }
-
 
 /* Increment a character to the succeeding character in consts.alphabet, modulo the given base.
 **
@@ -197,12 +196,13 @@ function decChar(char, base) {
 }
 
 
-const me = module.exports;
-me.consts = consts;
-me.isNumStr = isNumStr;
-me.bufferFromHexStr = bufferFromHexStr;
-me.no0x = no0x;
-me.with0x = with0x;
-me.removeLeadingZeros = removeLeadingZeros;
-me.removeTrailingZeros = removeTrailingZeros;
+module.exports = {
+  consts:                   consts,
+  isNumStr:                 isNumStr,
+  bufferFromHexStr:         bufferFromHexStr,
+  no0x:                     no0x,
+  with0x:                   with0x,
+  removeLeadingZeros:       removeLeadingZeros,
+  removeTrailingZeros:      removeTrailingZeros
+}
 
