@@ -35,9 +35,23 @@ let str = 'abcdef.fedcba';                 // {string} - The string to test.
 let base = 16;                             // {number = 10} - Optional. The ostensible base of the string.
 let radixPointOk = true;                   // {bool = false} - Optional. If false, only integers are allowed.
 
-numstr.isNumStr(str, base, radixPointOk)   // {bool} - Returns true if the string is a number in the specified base, false otherwise.
+numstr.isNumStr(str, base, radixPointOk);  // {bool} - Returns true if the string is a number in the specified base, false otherwise.
 ```
 
+### no0x
 
+Remove the hex prefix `0x`, if present, from a hex string.
 
+```javascript
+numstr.no0x('abcdef');             // returns 'abcdef'
+numstr.no0x('0xabcdef');           // returns 'abcdef'
+```
 
+### with0x
+
+Add a hex prefix `0x`, if not already present, to a hex string.
+
+```javascript
+numstr.with0x('abcdef');             // returns '0xabcdef'
+numstr.with0x('0xabcdef');           // returns '0xabcdef'
+```

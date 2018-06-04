@@ -106,8 +106,29 @@ function changeCase(code) {
   else return code;
 }
 
+/* Remove the hex prefix, if present, from a hex string.
+**
+** @param {string} hexStr - The hex string.
+** @resolve {string} The hex string without a 0x prefix.
+*/
+function no0x(hexStr) {
+  if (hexStr.slice(0, 2) === '0x') hexStr = hexStr.slice(2);
+  return hexStr;
+}
+
+/* Add a hex prefix, if not already present, to a hex string.
+**
+** @param {string} hexStr - The hex string.
+** @resolve {string} The hex string with 0x prefix.
+*/
+function with0x(hexStr) {
+  if (hexStr.slice(0, 2) !== '0x') hexStr = '0x' + hexStr;
+  return hexStr;
+}
 
 
-
-module.exports.isNumStr = isNumStr;
-module.exports.consts = consts;
+const me = module.exports;
+me.consts = consts;
+me.isNumStr = isNumStr;
+me.no0x = no0x;
+me.with0x = with0x;
