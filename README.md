@@ -77,7 +77,7 @@ Round a base 10 integer string to a given number of significant digits.  Rounds 
 numstr.roundInt('123456', 4);          // returns '123500'
 numstr.roundInt('123450', 4);          // returns '123400'
 numstr.roundInt('123350', 4);          // returns '123400'
-numstr.roundInt('-123350', 4);          // returns '-123400'
+numstr.roundInt('-123350', 4);         // returns '-123400'
 ```
 
 ### rectify

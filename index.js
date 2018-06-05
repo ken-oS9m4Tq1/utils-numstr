@@ -345,6 +345,45 @@ function valToChar(val) {
   return consts.alphabet[val];
 }
 
+/* Convert to scientific notation a base 10 integer in string representation.
+**
+** @param {string} str - The integer to be converted.
+** @param {number} minExp - If the exponent is smaller than this value, the integer will be returned in fixed-point notation.
+** @param {number} precision - Maximum significant digits included in the converted value.
+** @return {string} The converted integer. Undefined if error.
+*/
+function toSci(str, minExp = 0, precision = +Infinity) {
+  if (!isNumStr(str, 10)) throw new Error('in toSci, string must be an integer in base 10.');
+  if (precision <= 0) throw new Error('in toSci, precision must be greater than zero.');
+  const minus = String.fromCharCode(consts.minus);
+  const point = String.fromCharCode(consts.point);
+
+  str = roundInt(str, precision);
+
+  // If the number is negative, ignore the negative sign for now.
+  let start = (str[0] == minus) ? 1 : 0;
+
+  // Determine the exponent.
+  let exp = str.length - start - 1;
+
+  // If the exponent is less than minExp, return the value in fixed point notation.
+  if (exp < minExp) return str;
+  
+  // Get the integer and fractional parts of the coefficient.
+  let integerPart = str[start];
+  let fractionalPart = removeTrailingZeros(str.slice(start + 1));
+
+  // Express the value in scientific notation.
+  let sci = integerPart;
+  if (fractionalPart) sci += point + fractionalPart;
+  sci += 'e+' + exp.toString();
+
+  // If the value was negative, replace the negative sign.
+  if (str[0] == minus) sci = minus + sci;
+
+  return sci;
+}
+
 /* Round a base 10 integer string to a given number of significant digits.
 **
 ** @param {string} str - The integer to be rounded.
@@ -352,9 +391,9 @@ function valToChar(val) {
 ** @return {string} The rounded integer.
 */
 function roundInt(str, precision = +Infinity) {
-  if (!isNumStr(str, 10)) throw new Error('in function roundInt, \'str\' must be an integer string in base 10.');
-  if (precision <= 0) throw new Error('in function roundIntStr, precision must be greater than 0.');
-  let minus = String.fromCharCode(consts.minus);
+  if (!isNumStr(str, 10)) throw new Error('in roundInt, string must be an integer in base 10.');
+  if (precision <= 0) throw new Error('in roundInt, precision must be greater than 0.');
+  const minus = String.fromCharCode(consts.minus);
   
   str = rectify(str);
 
@@ -369,7 +408,7 @@ function roundInt(str, precision = +Infinity) {
   let nextDigit = charToVal(str[precision + start]);
   let remainder = str.slice(precision + start + 1);
 
-  // Decide whether to increment the significant part using standard rounding rules.
+  // Decide whether to increment the significant part; round half to even.
   let increment = false;
   if (nextDigit > 5) increment = true;
   else if (nextDigit == 5) {
@@ -383,12 +422,12 @@ function roundInt(str, precision = +Infinity) {
 
   // The rounded value is the significant part padded with zeros.
   let roundedLength = sigPart.length + 1 + remainder.length;
-  let roundedVal = sigPart.padEnd(roundedLength, consts.alphabet[0]);
+  let rounded = sigPart.padEnd(roundedLength, consts.alphabet[0]);
 
   // If the value was negative, replace the negative sign.
-  roundedVal = (str[0] == minus) ? minus + roundedVal : roundedVal;
+  rounded = (str[0] == minus) ? minus + rounded : rounded;
 
-  return roundedVal;
+  return rounded;
 }
 
 /* Check if a string is entirely composed of the given character. True if empty string.
@@ -411,6 +450,7 @@ module.exports = {
   bufferFromHexStr:         bufferFromHexStr,
   no0x:                     no0x,
   with0x:                   with0x,
+  toSci:                    toSci,
   roundInt:                 roundInt,
   rectify:                  rectify,
   removeLeadingZeros:       removeLeadingZeros,
