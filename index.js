@@ -150,11 +150,14 @@ function with0x(hexStr) {
 **
 */
 function rectify(str) {
+  let minus = String.fromCharCode(consts.minus);
+  let point = String.fromCharCode(consts.point);
+
   // Remove the negative sign if necessary.
-  let abs = (str[0] === '-') ? str.slice(1) : str;
+  let abs = (str[0] === minus) ? str.slice(1) : str;
 
   // Split into fractional and integer parts.
-  let split = abs.split('.');
+  let split = abs.split(point);
   let integerPart = split[0] || '';
   let fractionalPart = split[1] || '';
 
@@ -164,11 +167,11 @@ function rectify(str) {
 
   // Put it back together.
   let rectified;
-  rectified = integerPart ? integerPart : '0';
-  rectified += fractionalPart ? '.' + fractionalPart : '';
+  rectified = integerPart ? integerPart : consts.alphabet[0];
+  rectified += fractionalPart ? point + fractionalPart : '';
 
   // Replace the negative sign if necessary.
-  if (str[0] === '-' && rectified != '0') rectified = '-' + rectified;
+  if (str[0] === minus && rectified != consts.alphabet[0]) rectified = minus + rectified;
 
   return rectified;
 }
@@ -179,7 +182,13 @@ function rectify(str) {
 function removeLeadingZeros(str) {
   if (typeof str != 'string') throw new Error('in removeLeadingZeros, data type mismatch');
 
-  let iNonZero = str.search(/[^0]/); // index of the first nonzero digit
+  let iNonZero = -1;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] != consts.alphabet[0]) {
+      iNonZero = i; // index of the first nonzero digit
+      break;
+    }
+  }
   if (iNonZero > 0) str = str.slice(iNonZero);
   if (iNonZero < 0) return ''; // if 'str' is entirely zeros or is the empty string
     
@@ -194,7 +203,7 @@ function removeTrailingZeros(str) {
 
   let iNonZero = -1;
   for (let i = str.length - 1; i >= 0; i--) {
-    if (str[i] != '0') {
+    if (str[i] != consts.alphabet[0]) {
       iNonZero = i; // index of the first nonzero digit from the right.
       break;
     }
@@ -209,13 +218,14 @@ function removeTrailingZeros(str) {
 */
 function incInt(str, base = 10) {
   if (!isNumStr(str, base)) throw new Error('in incInt, str is not an integer in the given base');
+  let minus = String.fromCharCode(consts.minus);
 
   let rec = rectify(str);
 
   // If the rectified value is negative, call decrement on the absolute value.
-  if (rec[0] == '-') {
+  if (rec[0] == minus) {
     let dec = decInt(rec.slice(1), base);
-    return (dec == '0') ? dec : '-' + dec; // avoid '-0'
+    return (dec == consts.alphabet[0]) ? dec : minus + dec; // avoid '-0'
   }
 
   // Find the first character from the right that is not maximal.
@@ -232,7 +242,7 @@ function incInt(str, base = 10) {
   // If all characters are maximal, extend the int string by prepending a '0'.
   // The prepended character becomes the character to increment.
   if (incIndex < 0) {
-    rec = '0' + rec;
+    rec = consts.alphabet[0] + rec;
     incIndex = 0;
   }
 
@@ -241,7 +251,7 @@ function incInt(str, base = 10) {
   let inc = rec.slice(0, incIndex) + incrementedChar;
 
   // Reset all lesser character places to zero.
-  inc = inc.padEnd(rec.length, '0');
+  inc = inc.padEnd(rec.length, consts.alphabet[0]);
 
   return inc;
 }
@@ -251,27 +261,28 @@ function incInt(str, base = 10) {
 */
 function decInt(str, base = 10) {
   if (!isNumStr(str, base)) throw new Error('in decInt, str is not an integer in the given base');
+  let minus = String.fromCharCode(consts.minus);
 
   let rec = rectify(str);
 
   // If the rectified value is negative, call increment on the absolute value.
-  if (rec[0] == '-') {
+  if (rec[0] == minus) {
     let inc = incInt(rec.slice(1), base);
-    return ('-' + inc);
+    return (minus + inc);
   }
 
   // Find the first character from the right that is not zero.
   // This is the character to decrement.
   let decIndex = -1;
   for (let i = rec.length - 1; i >= 0; i--) {
-    if (rec[i] != '0') {
+    if (rec[i] != consts.alphabet[0]) {
       decIndex = i;
       break;
     }
   }
 
-  // If all characters are found to be zero, the decremented value is '-1', in any base.
-  if (decIndex < 0) return '-1';
+  // If all characters are found to be zero, the decremented value is -1.
+  if (decIndex < 0) return minus + consts.alphabet[1];
 
   // Decrement the appropriate character.
   let decrementedChar = decChar(rec[decIndex], base);
