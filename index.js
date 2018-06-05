@@ -345,6 +345,65 @@ function valToChar(val) {
   return consts.alphabet[val];
 }
 
+/* Round a base 10 integer string to a given number of significant digits.
+**
+** @param {string} str - The integer to be rounded.
+** @param {number} precision - The desired number of significant digits.
+** @return {string} The rounded integer.
+*/
+function roundInt(str, precision = +Infinity) {
+  if (!isNumStr(str, 10)) throw new Error('in function roundInt, \'str\' must be an integer string in base 10.');
+  if (precision <= 0) throw new Error('in function roundIntStr, precision must be greater than 0.');
+  let minus = String.fromCharCode(consts.minus);
+  
+  str = rectify(str);
+
+  // If the number is negative, ignore the negative sign for now.
+  let start = (str[0] == minus) ? 1 : 0;
+
+  // If the length of the number is less than or equal to precision, return the number.
+  if (str.length - start <= precision) return str;
+
+  // Get the significant part, the digit following, and the remaining digits.
+  let sigPart = str.slice(start, precision + start);
+  let nextDigit = charToVal(str[precision + start]);
+  let remainder = str.slice(precision + start + 1);
+
+  // Decide whether to increment the significant part using standard rounding rules.
+  let increment = false;
+  if (nextDigit > 5) increment = true;
+  else if (nextDigit == 5) {
+    if (!isEntirely(remainder, consts.alphabet[0])) increment = true;  // inc if remainder is nonzero
+    else {
+      let lSigDigit = charToVal(sigPart[precision - 1]); // otherwise inc if it will give you an even number.
+      if (lSigDigit % 2) increment = true;
+    }
+  }
+  if (increment) sigPart = incInt(sigPart);
+
+  // The rounded value is the significant part padded with zeros.
+  let roundedLength = sigPart.length + 1 + remainder.length;
+  let roundedVal = sigPart.padEnd(roundedLength, consts.alphabet[0]);
+
+  // If the value was negative, replace the negative sign.
+  roundedVal = (str[0] == minus) ? minus + roundedVal : roundedVal;
+
+  return roundedVal;
+}
+
+/* Check if a string is entirely composed of the given character. True if empty string.
+** Seems to execute faster than constructing a regexp.
+**
+*/
+function isEntirely(str, char) {
+  let charCode = char.charCodeAt();
+  for (let i = 0; i < str.length; i++) {
+    let strCode = str[i].charCodeAt();
+    if (strCode != charCode && (consts.caseSensitive || strCode != changeCase(charCode))) return false;
+  }
+  return true;
+}
+
 
 module.exports = {
   consts:                   consts,
@@ -352,6 +411,7 @@ module.exports = {
   bufferFromHexStr:         bufferFromHexStr,
   no0x:                     no0x,
   with0x:                   with0x,
+  roundInt:                 roundInt,
   rectify:                  rectify,
   removeLeadingZeros:       removeLeadingZeros,
   removeTrailingZeros:      removeTrailingZeros,
@@ -362,4 +422,5 @@ module.exports = {
   charToVal:                charToVal,
   valToChar:                valToChar
 }
+
 
