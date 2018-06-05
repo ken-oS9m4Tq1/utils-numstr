@@ -150,8 +150,6 @@ function with0x(hexStr) {
 **
 */
 function rectify(str) {
-  if (!isNumStr(str, consts.alphabet.length, true)) throw new Error('in rectify, str is not a number');
-
   // Remove the negative sign if necessary.
   let abs = (str[0] === '-') ? str.slice(1) : str;
 
@@ -206,11 +204,95 @@ function removeTrailingZeros(str) {
   return str;
 }
 
+/* Increment an integer string in a given base.
+**
+*/
+function incInt(str, base = 10) {
+  if (!isNumStr(str, base)) throw new Error('in incInt, str is not an integer in the given base');
+
+  let rec = rectify(str);
+
+  // If the rectified value is negative, call decrement on the absolute value.
+  if (rec[0] == '-') {
+    let dec = decInt(rec.slice(1), base);
+    return (dec == '0') ? dec : '-' + dec; // avoid '-0'
+  }
+
+  // Find the first character from the right that is not maximal.
+  // This is the character to increment.
+  let maximalChar = consts.alphabet[base - 1];
+  let incIndex = -1;
+  for (let i = rec.length - 1; i >= 0; i--) {
+    if (rec[i] != maximalChar) {
+      incIndex = i;
+      break;
+    }
+  }
+
+  // If all characters are maximal, extend the int string by prepending a '0'.
+  // The prepended character becomes the character to increment.
+  if (incIndex < 0) {
+    rec = '0' + rec;
+    incIndex = 0;
+  }
+
+  // Increment the appropriate character.
+  let incrementedChar = incChar(rec[incIndex], base);
+  let inc = rec.slice(0, incIndex) + incrementedChar;
+
+  // Reset all lesser character places to zero.
+  inc = inc.padEnd(rec.length, '0');
+
+  return inc;
+}
+
+/* Decrement an integer string in a given base.
+**
+*/
+function decInt(str, base = 10) {
+  if (!isNumStr(str, base)) throw new Error('in decInt, str is not an integer in the given base');
+
+  let rec = rectify(str);
+
+  // If the rectified value is negative, call increment on the absolute value.
+  if (rec[0] == '-') {
+    let inc = incInt(rec.slice(1), base);
+    return ('-' + inc);
+  }
+
+  // Find the first character from the right that is not zero.
+  // This is the character to decrement.
+  let decIndex = -1;
+  for (let i = rec.length - 1; i >= 0; i--) {
+    if (rec[i] != '0') {
+      decIndex = i;
+      break;
+    }
+  }
+
+  // If all characters are found to be zero, the decremented value is '-1', in any base.
+  if (decIndex < 0) return '-1';
+
+  // Decrement the appropriate character.
+  let decrementedChar = decChar(rec[decIndex], base);
+  let dec = rec.slice(0, decIndex) + decrementedChar;
+
+  // Reset all lesser character places to the maximal character for the given base.
+  let maximalChar = consts.alphabet[base - 1];
+  dec = dec.padEnd(rec.length, maximalChar);
+
+  // Rectify in case the decremented character left a leading zero.
+  dec = rectify(dec);
+
+  return dec;
+}
+
 /* Increment a character to the succeeding character in consts.alphabet, modulo the given base.
 **
 */
-function incChar(char, base) {
-  let val = consts.alphabet.indexOf(char);
+function incChar(char, base = 10) {
+  let val = charToVal(char);
+  if (val < 0) throw new Error('in incChar, invalid character');
   val = (val + 1) % base;
   return consts.alphabet[val];
 }
@@ -218,9 +300,37 @@ function incChar(char, base) {
 /* Decrement a character to the preceding character in consts.alphabet, modulo the given base.
 **
 */
-function decChar(char, base) {
-  let val = consts.alphabet.indexOf(char);
+function decChar(char, base = 10) {
+  let val = charToVal(char);
+  if (val < 0) throw new Error('in decChar, invalid character');
   val = (val + base - 1) % base;
+  return consts.alphabet[val];
+}
+
+/* Return the value of a character according to the current alphabet or -1 if the character is invalid.
+**
+*/
+function charToVal(char) {
+  if (typeof char != 'string' || char.length != 1) throw new Error('in charToVal, invalid argument');
+
+  if (consts.caseSensitive) return consts.alphabet.indexOf(char);
+
+  let code = char.charCodeAt(0);
+  let val = -1;
+  for (let i = 0; i < consts.alphabet.length; i++) {
+    let okCode = consts.alphabet[i].charCodeAt(0);
+    if (code == okCode || code == changeCase(okCode)) {
+      val = i;
+      break;
+    }
+  }
+  return val;
+}
+
+/* Return the character that represents a given value according to the current alphabet or undefined if no such character exists.
+**
+*/
+function valToChar(val) {
   return consts.alphabet[val];
 }
 
@@ -233,6 +343,12 @@ module.exports = {
   with0x:                   with0x,
   rectify:                  rectify,
   removeLeadingZeros:       removeLeadingZeros,
-  removeTrailingZeros:      removeTrailingZeros
+  removeTrailingZeros:      removeTrailingZeros,
+  incInt:                   incInt,
+  decInt:                   decInt,
+  incChar:                  incChar,
+  decChar:                  decChar,
+  charToVal:                charToVal,
+  valToChar:                valToChar
 }
 

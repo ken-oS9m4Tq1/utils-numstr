@@ -51,7 +51,7 @@ numstr.bufferFromHexStr('4f941 4295f ef924 2d8a4 9762e 72af1 4');     // returns
 
 ### no0x
 
-Remove the hex prefix `0x`, if present, from a hex string.
+Remove the hex prefix `'0x'`, if present, from a hex string.
 
 ```javascript
 numstr.no0x('abcdef');          // returns 'abcdef'
@@ -60,7 +60,7 @@ numstr.no0x('0xabcdef');        // returns 'abcdef'
 
 ### with0x
 
-Add a hex prefix `0x`, if not already present, to a hex string.
+Add a hex prefix `'0x'`, if not already present, to a hex string.
 
 ```javascript
 numstr.with0x('abcdef');        // returns '0xabcdef'
@@ -93,10 +93,64 @@ Format a number string so that it looks like a normal number.
 * Trailing zeros are removed from the fractional part. 
 * Negative signs are removed from zero values. 
 * A radix point is included only for nonzero fractional values. 
-* If the string is all zeros, is empty, or otherwise implies a zero value, the function returns '0'.
+* If the string is all zeros, is empty, or otherwise implies a zero value, the function returns `'0'`.
 
 ```javascript
 numstr.rectify('-00123.4560');      // returns '-123.456'
 numstr.rectify('123.000');          // returns '123'
 numstr.rectify('-.0');              // returns '0'
+```
+
+### incInt
+
+Increment an integer string in a given base.
+
+```javascript
+numstr.incInt('00ff', 16);           // returns '100'
+numstr.incInt('-100', 10);           // returns '-99'
+```
+
+### decInt
+
+Decrement an integer string in a given base.
+
+```javascript
+numstr.decInt('0100', 16);           // returns 'ff'
+numstr.decInt('-100', 10);           // returns '-101'
+```
+
+### incChar
+
+Increment a character to the succeeding character in consts.alphabet, modulo the given base.
+
+```javascript
+numstr.incChar('1', 2);            // returns '0'
+numstr.incChar('1', 10);           // returns '2'
+```
+
+### decChar
+
+Decrement a character to the preceding character in consts.alphabet, modulo the given base.
+
+```javascript
+numstr.decChar('0', 10);           // returns '9'
+numstr.decChar('a', 16);           // returns '9'
+```
+
+### charToVal
+
+Convert a character to its numerical value according to the current alphabet.  Returns -1 if the character is not in `consts.alphabet`.
+
+```javascript
+numstr.charToVal('a');         // returns 10
+numstr.charToVal('!');         // returns -1
+```
+
+### valToChar
+
+Convert a numerical value to its corresponding character according to the current alphabet.  Returns `undefined` if the value exceeds the range of `consts.alphabet`.
+
+```javascript
+numstr.valToChar(15);          // returns 'f'
+numstr.valToChar(-1);          // returns undefined
 ```
