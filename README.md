@@ -94,7 +94,7 @@ Format a number string so that it looks like a normal number.
 * Leading zeros are removed from the integer part. 
 * Trailing zeros are removed from the fractional part. 
 * Negative signs are removed from zero values. 
-* A radix point is included only for nonzero fractional values. 
+* A `'.'` point is included only for nonzero fractional values. 
 * If the string is all zeros, is empty, or otherwise implies a zero value, the function returns `'0'`.
 
 ```javascript
