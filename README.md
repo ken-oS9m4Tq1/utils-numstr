@@ -69,22 +69,15 @@ numstr.with0x('abcdef');        // returns '0xabcdef'
 numstr.with0x('0xabcdef');      // returns '0xabcdef'
 ```
 
-### removeLeadingZeros
+### roundInt
 
-Remove the leading zeros from a string.
-
-```javascript
-numstr.removeLeadingZeros('0000abc');       // returns 'abc'
-numstr.removeLeadingZeros('0000');          // returns ''
-```
-
-### removeTrailingZeros
-
-Remove the trailing zeros from a string.
+Round a base 10 integer string to a given number of significant digits.  Rounds half to even.
 
 ```javascript
-numstr.removeTrailingZeros('1230000');      // returns '123'
-numstr.removeTrailingZeros('0000');         // returns ''
+numstr.roundInt('123456', 4);          // returns '123500'
+numstr.roundInt('123450', 4);          // returns '123400'
+numstr.roundInt('123350', 4);          // returns '123400'
+numstr.roundInt('-123350', 4);          // returns '-123400'
 ```
 
 ### rectify
@@ -101,6 +94,24 @@ Format a number string so that it looks like a normal number.
 numstr.rectify('-00123.4560');      // returns '-123.456'
 numstr.rectify('123.000');          // returns '123'
 numstr.rectify('-.0');              // returns '0'
+```
+
+### removeLeadingZeros
+
+Remove the leading zeros from a string.
+
+```javascript
+numstr.removeLeadingZeros('0000abc');       // returns 'abc'
+numstr.removeLeadingZeros('0000');          // returns ''
+```
+
+### removeTrailingZeros
+
+Remove the trailing zeros from a string.
+
+```javascript
+numstr.removeTrailingZeros('1230000');      // returns '123'
+numstr.removeTrailingZeros('0000');         // returns ''
 ```
 
 ### incInt
