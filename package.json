@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ken-oyWs2vlG/utils-numstr/issues"
   },
-  "homepage": "https://github.com/ken-oyWs2vlG/utils-numstr#readme"
+  "homepage": "https://github.com/ken-oyWs2vlG/utils-numstr#readme",
+  "dependencies": {
+    "altered-base": "^2.0.1"
+  }
 }
