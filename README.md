@@ -14,9 +14,11 @@ npm i utils-numstr
 const numstr = require('utils-numstr');
 ```
 
+The functions in this module can operate on string numbers of unlimited size and will maintain precision to an infinite number of significant digits.
+
 The default character alphabet is [0-9a-z].  This can be customized by editing the array `consts.alphabet` that defines the current alphabet.  Each element of `consts.alphabet` should be a single character; the index of the element is taken to be the numerical value of the character.
 
-The package `utils-numstr` is case insensitive by default.  If necessary, case sensitivity can be enabled by setting `consts.caseSensitive` to true.
+The module is case insensitive by default.  If necessary, case sensitivity can be enabled by setting `consts.caseSensitive` to true.
 
 For example, one can define a custom alphabet where upper case and lower case letters assume different numerical values:
 
@@ -24,6 +26,8 @@ For example, one can define a custom alphabet where upper case and lower case le
 numstr.consts.caseSensitive = true;
 numstr.consts.alphabet = Array.from('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 ```
+
+Some functions are intended to operate only on certain bases.  Namely, `bufferFromHexStr`, `no0x`, and `with0x` operate on hexadecimal numbers; `toSci` and `roundInt` operate on decimal numbers.
 
 ## functions
 
@@ -174,6 +178,7 @@ Convert a character to its numerical value according to the current alphabet.  R
 
 ```javascript
 numstr.charToVal('a');         // returns 10
+numstr.charToVal('A');         // returns 10
 numstr.charToVal('!');         // returns -1
 ```
 
