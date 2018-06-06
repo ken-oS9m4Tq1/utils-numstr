@@ -1,47 +1,8 @@
+const ab = require('altered-base');
 
-
-let consts = {
-  alphabet: [ 
-  '0',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z' 
-  ],
-  minus: 45,
-  point: 46
-}
+let consts = ab.consts;
+consts.minus = 45;
+consts.point = 46;
 
 /* Check that a string represents a number in a given base.
 ** False if the string contains invalid characters or too many radix points. True otherwise.
@@ -446,6 +407,7 @@ function isEntirely(str, char) {
 
 module.exports = {
   consts:                   consts,
+  convert:                  ab.convert,
   isNumStr:                 isNumStr,
   bufferFromHexStr:         bufferFromHexStr,
   no0x:                     no0x,
