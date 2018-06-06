@@ -50,7 +50,6 @@ Note: this function accomodates the Buffer data type.  Therefore, it will only r
 numstr.bufferFromHexStr('4f941 4295f ef924 2d8a4 9762e 72af1 4');     // returns <Buffer 04 f9 41 42 95 fe f9 24 2d 8a 49 76 2e 72 af 14>
 ```
 
-
 ### no0x
 
 Remove the hex prefix `'0x'`, if present, from a hex string.
@@ -67,6 +66,25 @@ Add a hex prefix `'0x'`, if not already present, to a hex string.
 ```javascript
 numstr.with0x('abcdef');        // returns '0xabcdef'
 numstr.with0x('0xabcdef');      // returns '0xabcdef'
+```
+
+### toSci
+
+Convert to scientific notation a base 10 integer in string representation.  If a minimum exponent is specified, integers with a smaller exponent will be returned in fixed point notation.  By default, the function is precise to an infinite number of significant digits.
+
+```javascript
+// Parameters
+let str = '123450000';                  // {string} - The base 10 integer to convert.
+let minExp = 3;                         // {number = 0} - Optional. Number will be returned in fixed point notation unless its exponent is at least minExp.
+let precision = 4;                      // {number = +Infinity} - Optional. The number of significant digits to include in the converted number.
+
+numstr.toSci(str, minExp, precision);   // {string} - The integer in scientific notation.
+
+// Examples
+numstr.toSci('123450000');              // returns '1.2345e+8'
+numstr.toSci('123450000', 3, 4);        // returns '1.234e+8'
+numstr.toSci('123');                    // returns '1.23e+2'
+numstr.toSci('123', 3);                 // returns '123'
 ```
 
 ### roundInt
