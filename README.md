@@ -16,7 +16,7 @@ const numstr = require('utils-numstr');
 
 The functions in this module can operate on string numbers of unlimited size and will maintain precision to an infinite number of significant digits.
 
-The default character alphabet is [0-9a-z].  This can be customized by editing the array `consts.alphabet` that defines the current alphabet.  Each element of `consts.alphabet` should be a single character; the index of the element is taken to be the numerical value of the character.
+The default character alphabet is [0-9a-z].  This can be customized by editing the array `consts.alphabet` that defines the current alphabet.  Each element of `consts.alphabet` should be a single character; the index of the element is taken to be the numerical value of the character.  In general, for functions that accept a base as an argument the maximum base is the current alphabet length.
 
 The module is case insensitive by default.  If necessary, case sensitivity can be enabled by setting `consts.caseSensitive` to true.
 
@@ -101,6 +101,21 @@ numstr.roundInt('123450', 4);          // returns '123400'
 numstr.roundInt('123350', 4);          // returns '123400'
 numstr.roundInt('-123350', 4);         // returns '-123400'
 ```
+
+### convert
+
+Convert a positive integer string to another base.
+
+```javascript
+// Parameters
+let numberString = '4f9414295fef9242d8a49762e72af14';    // {string} - A positive integer in any base.
+let fromBase = 16;                                       // {number} - The current base of the integer string.
+let toBase = 36;                                         // {number} - The base to which the string will be converted.
+
+numstr.convert(numberString, fromBase, toBase);          // {string} - The integer expressed in the requested base.
+```
+
+Note: this function can be installed independently via the <a href="https://github.com/ken-oyWs2vlG/altered-base#readme">altered-base</a> package.  See the <a href="https://github.com/ken-oyWs2vlG/altered-base#readme">altered-base readme</a> for additional documentation.
 
 ### rectify
 
