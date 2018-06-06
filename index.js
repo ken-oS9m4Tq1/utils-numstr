@@ -184,7 +184,7 @@ function removeLeadingZeros(str) {
 
   let iNonZero = -1;
   for (let i = 0; i < str.length; i++) {
-    if (str[i] != consts.alphabet[0]) {
+    if (charToVal(str[i]) != 0) {
       iNonZero = i; // index of the first nonzero digit
       break;
     }
@@ -203,7 +203,7 @@ function removeTrailingZeros(str) {
 
   let iNonZero = -1;
   for (let i = str.length - 1; i >= 0; i--) {
-    if (str[i] != consts.alphabet[0]) {
+    if (charToVal(str[i]) != 0) {
       iNonZero = i; // index of the first nonzero digit from the right.
       break;
     }
